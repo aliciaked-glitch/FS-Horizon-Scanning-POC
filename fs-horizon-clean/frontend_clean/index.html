@@ -8,6 +8,7 @@
     :root {
       --bg: #0b1020;
       --panel: #121933;
+      --panel-2: #182244;
       --text: #eef2ff;
       --muted: #a8b3cf;
       --accent: #7c9cff;
@@ -15,6 +16,7 @@
       --border: #28345f;
       --danger: #ff7a7a;
       --ok: #86efac;
+      --warning: #fbbf24;
     }
     * { box-sizing: border-box; }
     body {
@@ -23,123 +25,81 @@
       background: linear-gradient(180deg, #09101f, #10172d);
       color: var(--text);
     }
-    .app {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      min-height: 100vh;
-    }
+    .app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
     .sidebar {
       background: rgba(12, 18, 37, 0.95);
       border-right: 1px solid var(--border);
       padding: 24px 18px;
     }
-    .brand {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-    .sub {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 28px;
-    }
+    .brand { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+    .sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
     .nav-btn {
-      width: 100%;
-      display: block;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--text);
-      text-align: left;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      font-size: 15px;
+      width: 100%; display: block; border: 1px solid var(--border); background: var(--panel);
+      color: var(--text); text-align: left; border-radius: 12px; padding: 14px; margin-bottom: 10px;
+      cursor: pointer; font-size: 15px;
     }
-    .nav-btn.active {
-      background: linear-gradient(135deg, #25386f, #1a2751);
-      border-color: var(--accent);
-    }
-    .content {
-      padding: 28px;
-    }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      gap: 16px;
-    }
+    .nav-btn.active { background: linear-gradient(135deg, #25386f, #1a2751); border-color: var(--accent); }
+    .content { padding: 28px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; }
     .status {
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--muted);
-      font-size: 14px;
+      padding: 10px 14px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--muted); font-size: 14px;
     }
     .status.ok { color: var(--ok); }
     .status.bad { color: var(--danger); }
-    .hero, .card {
-      background: rgba(18, 25, 51, 0.92);
-      border: 1px solid var(--border);
-      border-radius: 18px;
+    .hero, .card, .drawer {
+      background: rgba(18, 25, 51, 0.92); border: 1px solid var(--border); border-radius: 18px;
     }
-    .hero {
-      padding: 22px;
-      margin-bottom: 20px;
-    }
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: 30px;
-    }
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 760px;
-      line-height: 1.55;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .card {
-      padding: 18px;
-    }
+    .hero { padding: 22px; margin-bottom: 20px; }
+    .hero h1 { margin: 0 0 10px; font-size: 30px; }
+    .hero p { margin: 0; color: var(--muted); max-width: 760px; line-height: 1.55; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { padding: 18px; }
     .tag {
-      display: inline-block;
-      font-size: 12px;
-      color: #d7e3ff;
-      background: #23345f;
-      border: 1px solid #3c518a;
-      border-radius: 999px;
-      padding: 6px 10px;
-      margin-bottom: 10px;
+      display: inline-block; font-size: 12px; color: #d7e3ff; background: #23345f; border: 1px solid #3c518a;
+      border-radius: 999px; padding: 6px 10px; margin-bottom: 10px;
     }
-    .credibility {
-      font-size: 12px;
-      color: var(--accent-2);
-      margin-bottom: 10px;
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 10px; }
+    .credibility, .origin-chip {
+      font-size: 12px; border-radius: 999px; padding: 6px 10px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
     }
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      line-height: 1.35;
+    .credibility.high { color: var(--ok); }
+    .credibility.medium { color: var(--warning); }
+    .credibility.watch { color: #fca5a5; }
+    .origin-chip { color: var(--muted); }
+    .card h3 { margin: 0 0 10px; font-size: 18px; line-height: 1.35; }
+    .card p { color: var(--muted); line-height: 1.55; margin: 0 0 10px; }
+    .card .so-what { color: var(--text); font-size: 14px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+    .btn {
+      border: 1px solid var(--border); background: var(--panel-2); color: var(--text); border-radius: 10px;
+      padding: 10px 12px; cursor:pointer; font-size: 14px;
     }
-    .card p {
-      color: var(--muted);
-      line-height: 1.55;
-      margin: 0 0 10px;
+    .btn:hover { border-color: var(--accent); }
+    .feedback-note { color: var(--muted); font-size: 12px; margin-top: 10px; min-height: 18px; }
+    .drawer-wrap { margin-top: 20px; }
+    .drawer { padding: 20px; display:none; }
+    .drawer.open { display:block; }
+    .drawer h2 { margin-top: 0; }
+    .drawer-grid { display:grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+    .detail-box {
+      border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: rgba(255,255,255,0.02);
     }
-    .card .so-what {
-      color: var(--text);
-      font-size: 14px;
+    .source-list { display:grid; gap: 12px; }
+    .source-item {
+      border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: rgba(255,255,255,0.02);
     }
+    .source-item a { color: #b7c9ff; text-decoration: none; }
+    .source-item a:hover { text-decoration: underline; }
+    .source-top { display:flex; justify-content:space-between; gap: 12px; align-items:flex-start; }
+    .source-meta { color: var(--muted); font-size: 13px; margin: 6px 0 8px; }
+    .close-row { display:flex; justify-content: space-between; align-items:center; gap:12px; margin-bottom: 14px; }
     @media (max-width: 900px) {
       .app { grid-template-columns: 1fr; }
       .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
       .grid { grid-template-columns: 1fr; }
+      .drawer-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -165,27 +125,105 @@
 
       <section class="hero">
         <h1>Financial services horizon radar</h1>
-        <p>This dashboard pulls live issue data from the backend API and lets you filter by theme using the left-hand buttons.</p>
+        <p>This dashboard keeps the main view high level for senior leaders, while letting users open deeper source detail and signal provenance on demand.</p>
       </section>
 
       <section id="cards" class="grid"></section>
+
+      <div class="drawer-wrap">
+        <section id="drawer" class="drawer" aria-live="polite"></section>
+      </div>
     </main>
   </div>
 
   <script>
-    const API_BASE = "https://fs-horizon-scanning-poc-production.up.railway.app";
+    const API_BASE = "https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app";
 
     let allIssues = [];
     let activeFilter = "all";
+    let selectedIssueId = null;
 
     const cardsEl = document.getElementById("cards");
     const statusEl = document.getElementById("status");
     const buttons = document.querySelectorAll(".nav-btn");
+    const drawerEl = document.getElementById("drawer");
 
     function setStatus(text, mode = "") {
       statusEl.textContent = text;
       statusEl.className = "status";
       if (mode) statusEl.classList.add(mode);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function renderDrawer(issue) {
+      if (!issue) {
+        drawerEl.className = 'drawer';
+        drawerEl.innerHTML = '';
+        return;
+      }
+
+      const sourcesHtml = (issue.sources || []).map(source => `
+        <article class="source-item">
+          <div class="source-top">
+            <div>
+              <strong>${escapeHtml(source.title)}</strong>
+              <div class="source-meta">${escapeHtml(source.publisher)} · ${escapeHtml(source.source_type)} · credibility: ${escapeHtml(source.credibility)}</div>
+            </div>
+          </div>
+          <p>${escapeHtml(source.rationale)}</p>
+          <a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer">Open source</a>
+        </article>
+      `).join('');
+
+      drawerEl.className = 'drawer open';
+      drawerEl.innerHTML = `
+        <div class="close-row">
+          <h2>${escapeHtml(issue.title)}</h2>
+          <button class="btn" id="close-drawer">Close detail</button>
+        </div>
+        <div class="drawer-grid">
+          <div class="detail-box">
+            <div class="tag">${escapeHtml(issue.theme)}</div>
+            <p><strong>Origin of trend:</strong> ${escapeHtml(issue.origin_signal)}</p>
+            <p><strong>Source mix:</strong> ${escapeHtml(issue.source_summary)}</p>
+            <p><strong>Executive implication:</strong> ${escapeHtml(issue.so_what)}</p>
+          </div>
+          <div class="detail-box">
+            <p><strong>Why this matters:</strong> ${escapeHtml(issue.summary)}</p>
+            <p><strong>Geography:</strong> ${escapeHtml(issue.geography)}</p>
+            <p><strong>Confidence:</strong> ${escapeHtml(issue.credibility)}</p>
+          </div>
+        </div>
+        <h3>Source material</h3>
+        <div class="source-list">${sourcesHtml}</div>
+      `;
+
+      document.getElementById('close-drawer').addEventListener('click', () => {
+        selectedIssueId = null;
+        renderDrawer(null);
+      });
+    }
+
+    async function sendFeedback(issueId, vote, messageEl) {
+      try {
+        const res = await fetch(`${API_BASE}/api/feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ issue_id: issueId, vote })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        messageEl.textContent = vote === 'up' ? 'Marked as useful' : 'Marked for review';
+      } catch (err) {
+        messageEl.textContent = 'Feedback could not be saved';
+      }
     }
 
     function renderCards() {
@@ -202,6 +240,7 @@
             <p>Try another filter or check whether live data loaded successfully.</p>
           </div>
         `;
+        renderDrawer(null);
         return;
       }
 
@@ -209,14 +248,38 @@
         const card = document.createElement("article");
         card.className = "card";
         card.innerHTML = `
-          <div class="tag">${issue.theme}</div>
-          <div class="credibility">Credibility: ${issue.credibility} · ${issue.geography}</div>
-          <h3>${issue.title}</h3>
-          <p>${issue.summary}</p>
-          <p class="so-what"><strong>So what:</strong> ${issue.so_what}</p>
+          <div class="tag">${escapeHtml(issue.theme)}</div>
+          <div class="meta-row">
+            <div class="credibility ${escapeHtml(issue.credibility)}">Confidence: ${escapeHtml(issue.credibility)}</div>
+            <div class="origin-chip">${escapeHtml(issue.geography)}</div>
+          </div>
+          <h3>${escapeHtml(issue.title)}</h3>
+          <p>${escapeHtml(issue.summary)}</p>
+          <p class="so-what"><strong>So what:</strong> ${escapeHtml(issue.so_what)}</p>
+          <div class="actions">
+            <button class="btn detail-btn">View detail</button>
+            <button class="btn up-btn">👍 Useful</button>
+            <button class="btn down-btn">👎 Not useful</button>
+          </div>
+          <div class="feedback-note"></div>
         `;
+
+        card.querySelector('.detail-btn').addEventListener('click', () => {
+          selectedIssueId = issue.id;
+          renderDrawer(issue);
+        });
+
+        const noteEl = card.querySelector('.feedback-note');
+        card.querySelector('.up-btn').addEventListener('click', () => sendFeedback(issue.id, 'up', noteEl));
+        card.querySelector('.down-btn').addEventListener('click', () => sendFeedback(issue.id, 'down', noteEl));
+
         cardsEl.appendChild(card);
       });
+
+      if (selectedIssueId) {
+        const selected = allIssues.find(issue => issue.id === selectedIssueId);
+        renderDrawer(selected || null);
+      }
     }
 
     async function loadData() {
