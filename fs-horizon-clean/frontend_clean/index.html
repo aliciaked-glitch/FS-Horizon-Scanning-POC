@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FS Horizon Radar</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121933;
+      --text: #eef2ff;
+      --muted: #a8b3cf;
+      --accent: #7c9cff;
+      --accent-2: #5eead4;
+      --border: #28345f;
+      --danger: #ff7a7a;
+      --ok: #86efac;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #09101f, #10172d);
+      color: var(--text);
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: rgba(12, 18, 37, 0.95);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+    }
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+    .nav-btn {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      text-align: left;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .nav-btn.active {
+      background: linear-gradient(135deg, #25386f, #1a2751);
+      border-color: var(--accent);
+    }
+    .content {
+      padding: 28px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+    .status {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .status.ok { color: var(--ok); }
+    .status.bad { color: var(--danger); }
+    .hero, .card {
+      background: rgba(18, 25, 51, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+    .hero {
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.55;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .card {
+      padding: 18px;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      color: #d7e3ff;
+      background: #23345f;
+      border: 1px solid #3c518a;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+    }
+    .credibility {
+      font-size: 12px;
+      color: var(--accent-2);
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+    .card p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 10px;
+    }
+    .card .so-what {
+      color: var(--text);
+      font-size: 14px;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">FS Horizon Radar</div>
+      <div class="sub">Live regulatory and strategic horizon scan</div>
+
+      <button class="nav-btn active" data-filter="all">All issues</button>
+      <button class="nav-btn" data-filter="Geopolitics & national security">Geopolitics</button>
+      <button class="nav-btn" data-filter="Cyber & resilience">Cyber</button>
+      <button class="nav-btn" data-filter="AI & data governance">AI</button>
+      <button class="nav-btn" data-filter="Consumer & conduct">Consumer</button>
+      <button class="nav-btn" data-filter="Prudential risk">Prudential</button>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div><strong>Dashboard</strong></div>
+        <div id="status" class="status">Loading live API...</div>
+      </div>
+
+      <section class="hero">
+        <h1>Financial services horizon radar</h1>
+        <p>This dashboard pulls live issue data from the backend API and lets you filter by theme using the left-hand buttons.</p>
+      </section>
+
+      <section id="cards" class="grid"></section>
+    </main>
+  </div>
+
+  <script>
+    const API_BASE = "https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app";
+
+    let allIssues = [];
+    let activeFilter = "all";
+
+    const cardsEl = document.getElementById("cards");
+    const statusEl = document.getElementById("status");
+    const buttons = document.querySelectorAll(".nav-btn");
+
+    function setStatus(text, mode = "") {
+      statusEl.textContent = text;
+      statusEl.className = "status";
+      if (mode) statusEl.classList.add(mode);
+    }
+
+    function renderCards() {
+      const issues = activeFilter === "all"
+        ? allIssues
+        : allIssues.filter(issue => issue.theme === activeFilter);
+
+      cardsEl.innerHTML = "";
+
+      if (!issues.length) {
+        cardsEl.innerHTML = `
+          <div class="card">
+            <h3>No issues found</h3>
+            <p>Try another filter or check whether live data loaded successfully.</p>
+          </div>
+        `;
+        return;
+      }
+
+      issues.forEach(issue => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="tag">${issue.theme}</div>
+          <div class="credibility">Credibility: ${issue.credibility} · ${issue.geography}</div>
+          <h3>${issue.title}</h3>
+          <p>${issue.summary}</p>
+          <p class="so-what"><strong>So what:</strong> ${issue.so_what}</p>
+        `;
+        cardsEl.appendChild(card);
+      });
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch(`${API_BASE}/api/dashboard`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allIssues = data.issues || [];
+        setStatus("Live API connected", "ok");
+        renderCards();
+      } catch (err) {
+        setStatus("Live API failed to load", "bad");
+        allIssues = [];
+        renderCards();
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+        renderCards();
+      });
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
